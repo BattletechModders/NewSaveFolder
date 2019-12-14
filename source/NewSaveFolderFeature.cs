@@ -10,8 +10,6 @@ namespace NewSaveFolder
 {
     internal class NewSaveFolderFeature
     {
-        internal static NewSaveFolderFeature Shared = new NewSaveFolderFeature();
-
         private static string PathByKey(string key)
         {
             return Path.Combine(SavesPath, key + ".pref");

@@ -31,6 +31,7 @@ namespace NewSaveFolder
                 }
                 else
                 {
+                    Control.Logger.Log($"Saving to folder {NewSaveFolderFeature.SavesPath}");
 			        var harmony = HarmonyInstance.Create(Name);
                     harmony.PatchAll(Assembly.GetExecutingAssembly());
                 }
