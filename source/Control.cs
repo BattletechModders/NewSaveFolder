@@ -2,6 +2,7 @@
 using HBS.Logging;
 using HBS.Util;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace NewSaveFolder
@@ -16,8 +17,8 @@ namespace NewSaveFolder
         {
             try
             {
-                var isModTek = Type.GetType("ModTek.ModTek") != null;
-                if (!isModTek)
+                var hasModTek = GetAssemblyByName("ModTek") != null;
+                if (!hasModTek)
                 {
                     throw new InvalidOperationException("This mod is for ModTek only and does not run under ModLoader");
                 }
@@ -40,6 +41,11 @@ namespace NewSaveFolder
             {
                 Control.Logger.LogError(e);
             }
+        }
+
+        private static Assembly GetAssemblyByName(string name)
+        {
+            return AppDomain.CurrentDomain.GetAssemblies().SingleOrDefault(assembly => assembly.GetName().Name == name);
         }
     }
 }
