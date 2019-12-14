@@ -22,8 +22,18 @@ namespace NewSaveFolder
                     throw new InvalidOperationException("This mod is for ModTek only and does not run under ModLoader");
                 }
                 JSONSerializationUtility.FromJSON(settings, json);
-			    var harmony = HarmonyInstance.Create(Name);
-                harmony.PatchAll(Assembly.GetExecutingAssembly());
+                if (settings.MigrateSavesToVanillaLocation)
+                {
+                    throw new InvalidOperationException("MigrateSavesToVanillaLocation not yet implemented");
+                    // TODO how to know what location to use?
+                    // cloud vs local
+                    // gog vs steam vs more?
+                }
+                else
+                {
+			        var harmony = HarmonyInstance.Create(Name);
+                    harmony.PatchAll(Assembly.GetExecutingAssembly());
+                }
             }
             catch (Exception e)
             {
