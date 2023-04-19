@@ -20,19 +20,19 @@ public static class CachedSettings_Patches
         return instructions
             .MethodReplacer(
                 AccessTools.Method(typeof(PlayerPrefs), nameof(PlayerPrefs.HasKey)),
-                AccessTools.Method(typeof(NewSaveFolderFeature), nameof(HasKey))
+                AccessTools.Method(typeof(CachedSettings_Patches), nameof(HasKey))
             )
             .MethodReplacer(
                 AccessTools.Method(typeof(PlayerPrefs), nameof(PlayerPrefs.GetString), new []{typeof(string), typeof(string)}),
-                AccessTools.Method(typeof(NewSaveFolderFeature), nameof(GetString))
+                AccessTools.Method(typeof(CachedSettings_Patches), nameof(GetString))
             )
             .MethodReplacer(
                 AccessTools.Method(typeof(PlayerPrefs), nameof(PlayerPrefs.DeleteKey)),
-                AccessTools.Method(typeof(NewSaveFolderFeature), nameof(DeleteKey))
+                AccessTools.Method(typeof(CachedSettings_Patches), nameof(DeleteKey))
             )
             .MethodReplacer(
                 AccessTools.Method(typeof(PlayerPrefs), nameof(PlayerPrefs.SetString)),
-                AccessTools.Method(typeof(NewSaveFolderFeature), nameof(SetString))
+                AccessTools.Method(typeof(CachedSettings_Patches), nameof(SetString))
             );
     }
 
