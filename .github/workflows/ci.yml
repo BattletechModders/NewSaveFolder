@@ -1,0 +1,23 @@
+on: push
+name: CI
+
+jobs:
+  build:
+    uses: BattletechModders/ModTek/.github/workflows/mod-builder.yml@master
+    with:
+      checkout-directory: 'BATTLETECH/Mods/NewSaveFolder'
+      build-script: |
+        (
+          cd source
+          dotnet build -c Release -p:BattleTechGameDir="$BATTLETECH_DIR/"
+        )
+        (
+          cd ..
+          7z a -tzip -mx9 "$DIST_DIR/NewSaveFolder.zip" \
+            -ir!NewSaveFolder \
+            -xr!source "-xr!.*"
+        )
+      release-notes: |
+        Requires ModTek V4 or later
+        - NewSaveFolder.zip contains the mod
+    secrets: inherit

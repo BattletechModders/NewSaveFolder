@@ -1,51 +1,35 @@
-﻿using Harmony;
-using HBS.Logging;
+﻿using HBS.Logging;
 using HBS.Util;
 using System;
-using System.Linq;
 using System.Reflection;
 
-namespace NewSaveFolder
+namespace NewSaveFolder;
+
+public static class Control
 {
-    public static class Control
+    internal static ILog Logger => HBS.Logging.Logger.GetLogger(nameof(NewSaveFolder));
+    internal static readonly NewSaveFolderSettings settings = new();
+
+    public static void Start(string modDirectory, string json)
     {
-        internal static string Name = nameof(NewSaveFolder);
-        internal static ILog Logger => HBS.Logging.Logger.GetLogger(Name);
-        internal static NewSaveFolderSettings settings = new NewSaveFolderSettings();
-
-        public static void Start(string modDirectory, string json)
+        try
         {
-            try
+            JSONSerializationUtility.FromJSON(settings, json);
+            if (settings.MigrateSavesToVanillaLocation)
             {
-                var hasModTek = GetAssemblyByName("ModTek") != null;
-                if (!hasModTek)
-                {
-                    throw new InvalidOperationException("This mod is for ModTek only and does not run under ModLoader");
-                }
-                JSONSerializationUtility.FromJSON(settings, json);
-                if (settings.MigrateSavesToVanillaLocation)
-                {
-                    throw new InvalidOperationException("MigrateSavesToVanillaLocation not yet implemented");
-                    // TODO how to know what location to use?
-                    // cloud vs local
-                    // gog vs steam vs more?
-                }
-                else
-                {
-                    Control.Logger.Log($"Saving to folder {NewSaveFolderFeature.SavesPath}");
-			        var harmony = HarmonyInstance.Create(Name);
-                    harmony.PatchAll(Assembly.GetExecutingAssembly());
-                }
+                throw new InvalidOperationException("MigrateSavesToVanillaLocation not yet implemented");
+                // TODO how to know what location to use?
+                // cloud vs local
+                // gog vs steam vs more?
             }
-            catch (Exception e)
-            {
-                Control.Logger.LogError(e);
-            }
+
+            Logger.Log($"Saving to folder {NewSaveFolderFeature.SavesPath}");
+            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), nameof(NewSaveFolder));
         }
-
-        private static Assembly GetAssemblyByName(string name)
+        catch (Exception e)
         {
-            return AppDomain.CurrentDomain.GetAssemblies().SingleOrDefault(assembly => assembly.GetName().Name == name);
+            Logger.LogError(e);
+            throw;
         }
     }
 }
