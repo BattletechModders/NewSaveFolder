@@ -18,6 +18,6 @@ jobs:
             -xr!source "-xr!.*"
         )
       release-notes: |
-        Requires ModTek V4 or later
-        - NewSaveFolder.zip contains the mod
+        NewSaveFolder.zip contains the mod
+        Requires ModTek v4.3 or later.
     secrets: inherit
